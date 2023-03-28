@@ -1,10 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'game/base.html' %}
 
-</body>
-</html>
+{% block content %}
+    <div class="jumbotron">
+        <h1 class="display-4">Welcome to CryptoTrader</h1>
+        <p class="lead">CryptoTrader is a game where you can practice trading cryptocurrencies.</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h2>How to play</h2>
+            <p>Choose a cryptocurrency and start buying and selling it to make a profit. Keep an eye on the prices to
+                maximize your earnings.</p>
+
+            <h2>Current Cryptocurrency Prices</h2>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Symbol</th>
+                    <th>Price</th>
+                </tr>
+                </thead>
+                <tbody id="currency-table-body">
+                {% for currency in currencies %}
+                    <tr>
+                        <td>{{ currency.name }}</td>
+                        <td>{{ currency.symbol }}</td>
+                        <td class="currency-price">{{ currency.price }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-6">
+            <h2>Top 10 Players</h2>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Player</th>
+                    <th>Score</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for entry in scoreboard %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ entry.user }}</td>
+                        <td>{{ entry.score }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+{% block extra_js %}
+    <script>
+        const socket = new WebSocket("ws://" + window.location.host + "/ws/currencies/");
+
+        socket.onmessage = function (event) {
+            const data = JSON.parse(event.data);
+            if (data.type === "currencies_update") {
+                const currencies = data.currencies;
+                for (let i = 0; i < currencies.length; i++) {
+                    const currency = currencies[i];
+                    const row = document.querySelector(`#currency-table-body tr:nth-child(${i + 1})`);
+                    const priceCell = row.querySelector(".price");
+                    priceCell.textContent = currency.price;
+                }
+            }
+        };
+    </script>
+{% endblock %}

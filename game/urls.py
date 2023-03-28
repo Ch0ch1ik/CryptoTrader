@@ -10,5 +10,5 @@ urlpatterns = [
     path('portfolio/', views.portfolio, name='portfolio'),
     path('buy/<int:pk>/', views.buy_currency, name='buy_currency'),
     path('sell/<int:pk>/', views.sell_currency, name='sell_currency'),
-    path('transactions/', views.transaction_history, name='transaction_history'),
+    path('transactions/', views.transaction_history, name='transactions'),
 ]
