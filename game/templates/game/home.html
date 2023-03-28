@@ -58,19 +58,5 @@
 {% endblock %}
 {% block extra_js %}
     <script>
-        const socket = new WebSocket("ws://" + window.location.host + "/ws/currencies/");
-
-        socket.onmessage = function (event) {
-            const data = JSON.parse(event.data);
-            if (data.type === "currencies_update") {
-                const currencies = data.currencies;
-                for (let i = 0; i < currencies.length; i++) {
-                    const currency = currencies[i];
-                    const row = document.querySelector(`#currency-table-body tr:nth-child(${i + 1})`);
-                    const priceCell = row.querySelector(".price");
-                    priceCell.textContent = currency.price;
-                }
-            }
-        };
     </script>
 {% endblock %}

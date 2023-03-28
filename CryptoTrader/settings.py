@@ -37,20 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'game',
     'users',
-    'celery',
-    'django_celery_results',
-    'redis',
 ]
-
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-
-CELERY_BEAT_SCHEDULE = {
-    'update_data': {
-        'task': 'game.tasks.update_data',
-        'schedule': 60.0,
-    },
-}
 
 
 MIDDLEWARE = [
